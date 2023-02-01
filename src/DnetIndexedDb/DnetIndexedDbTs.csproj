@@ -3,17 +3,17 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <Authors>Adrian Mustelier Camino</Authors>
-    <Company>Datalnet Adrian Mustelier Camino</Company>
-    <Description>IndexedDB wrapper for Blazor</Description>
+    <Company></Company>
+    <Description>Unofficial IndexedDB wrapper for Blazor NET7, Blobs</Description>
     <PackageProjectUrl>https://github.com/Tailslide/DnetIndexedDb/tree/newpublish</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/amuste/DnetIndexedDb</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Tailslide/DnetIndexedDb/tree/newpublish</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <PackageTags>Blazor IndexedDB Datalnet</PackageTags>
-    <Copyright>Copyright 2020 (c) Datalnet. All rights reserved.</Copyright>
+    <PackageTags>Blazor IndexedDB NET7</PackageTags>
+    <Copyright></Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>
-    <Version>3.2.0</Version>
+    <Version>3.3.0</Version>
     <PackageReleaseNotes>
       Updated to NET7, Add blob storage routines
     </PackageReleaseNotes>
