@@ -2,6 +2,10 @@ master - .Net5 version
 
 master_net31 - 3.x version
 
+Unofficial Blob and NET7 package here:
+* [DnetIndexedDbTs](https://www.nuget.org/packages/DnetIndexedDbTs/) [![NuGet version (DnetIndexedDbTs)](https://img.shields.io/nuget/v/DnetIndexedDbTs.svg?style=flat-square)](https://www.nuget.org/packages/DnetIndexedDbTs/)
+
+
 # DnetIndexedDb
 This is a Blazor library to work with IndexedDB DOM API. It allows query multiple IndexedDb databases simultaneously 
 
