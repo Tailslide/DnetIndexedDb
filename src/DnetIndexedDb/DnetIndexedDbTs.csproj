@@ -12,6 +12,7 @@
     <PackageTags>Blazor IndexedDB Datalnet</PackageTags>
     <Copyright>Copyright 2020 (c) Datalnet. All rights reserved.</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	<StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>
     <Version>3.0.0</Version>
     <PackageReleaseNotes>
       Updated to NET7, Add blob storage routines
