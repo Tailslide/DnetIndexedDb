@@ -26,6 +26,7 @@ namespace DnetIndexedDbWasm
 
                 options.UseDatabase(blobModel);
             });
+            
             await builder.Build().RunAsync();
         }
     }

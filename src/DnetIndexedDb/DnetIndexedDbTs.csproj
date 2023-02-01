@@ -12,7 +12,6 @@
     <PackageTags>Blazor IndexedDB NET7</PackageTags>
     <Copyright></Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>
     <Version>3.4.0</Version>
     <PackageReleaseNotes>
       Updated to NET7, Add blob storage routines
