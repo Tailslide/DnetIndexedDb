@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Authors>Adrian Mustelier Camino</Authors>
+    <Authors></Authors>
     <Company></Company>
     <Description>Unofficial IndexedDB wrapper for Blazor NET7, Blobs</Description>
     <PackageProjectUrl>https://github.com/Tailslide/DnetIndexedDb/tree/newpublish</PackageProjectUrl>
@@ -13,7 +13,7 @@
     <Copyright></Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>
-    <Version>3.3.0</Version>
+    <Version>3.4.0</Version>
     <PackageReleaseNotes>
       Updated to NET7, Add blob storage routines
     </PackageReleaseNotes>
