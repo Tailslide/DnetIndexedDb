@@ -28,4 +28,4 @@ jobs:
       run: dotnet pack src/DnetIndexedDb/DnetIndexedDbTs.csproj --output nuget-packages --configuration Release --include-symbols
     - if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/newpublish'}}
       name: Push with dotnet
-      run: dotnet nuget push nuget-packages/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push nuget-packages/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
