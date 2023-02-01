@@ -21,7 +21,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore src/DnetIndexedDb =c Release
+      run: dotnet build --no-restore src/DnetIndexedDb -c Release
     - name: Test
       run: dotnet test --no-build --verbosity normal   src/DnetIndexedDb    
     - name: Pack with dotnet
