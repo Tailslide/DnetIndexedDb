@@ -23,7 +23,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore src/DnetIndexedDb
     - name: Test
-      run: dotnet test --no-build --verbosity normal   src\DnetIndexedDb    
+      run: dotnet test --no-build --verbosity normal   src/DnetIndexedDb    
     - name: Pack with dotnet
       run: dotnet pack src/DnetIndexedDb/DnetIndexedDbTs.csproj --output nuget-packages --configuration Release --include-symbols
     - if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/newpublish'}}
