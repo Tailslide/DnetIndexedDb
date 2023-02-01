@@ -5,16 +5,16 @@
     <Authors>Adrian Mustelier Camino</Authors>
     <Company>Datalnet Adrian Mustelier Camino</Company>
     <Description>IndexedDB wrapper for Blazor</Description>
-    <PackageProjectUrl>https://github.com/amuste/DnetIndexedDb</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Tailslide/DnetIndexedDb/tree/newpublish</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/amuste/DnetIndexedDb</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>Blazor IndexedDB Datalnet</PackageTags>
     <Copyright>Copyright 2020 (c) Datalnet. All rights reserved.</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.4.1</Version>
+    <Version>3.0.0</Version>
     <PackageReleaseNotes>
-      Feature: Added Fluent by Kylar
+      Updated to NET7, Add blob storage routines
     </PackageReleaseNotes>
   </PropertyGroup>
 
