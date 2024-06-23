@@ -1182,38 +1182,26 @@ window.dnetindexeddbinterop = (function () {
             return await deleteDb(dbModel).pipe(Rx.operators.take(1)).toPromise();
         },
 
-        addBlobItem: async function (fields, item) {
-            // extract unmarshalled fields from struct
-            const dbModelGuid = Blazor.platform.readStringField(fields, 0);
-            const objectStoreName = Blazor.platform.readStringField(fields, 8);
-            let key = Blazor.platform.readStringField(fields, 16);
-            const mimeType = Blazor.platform.readStringField(fields, 24);
+        addBlobItem: async function (indexedDbDatabaseModel, objectStoreName, key, mimeType, stream) {
             console.log(`Adding file with mime type ${mimeType}`);
             if (key === "") key = null;
-            const dbModel = getDbModel(dbModelGuid).dbModel;
+            const dbModel = getDbModel(indexedDbDatabaseModel.dbModelGuid).dbModel;
 
-            // create blob from array
-            const dataPtr = Blazor.platform.getArrayEntryPtr(item, 0, 4);
-            const length = Blazor.platform.getArrayLength(item);
-            var blob = new Blob([new Uint8Array(Module.HEAPU8.buffer, dataPtr, length)], { type: mimeType });
+            // create blob from stream
+            const arrayBuffer = await stream.arrayBuffer();
+            var blob = new Blob([arrayBuffer], { type: mimeType });
 
             return await addBlobItem(dbModel, objectStoreName, blob, key).pipe(Rx.operators.take(1)).toPromise();
         },
 
-        updateBlobItem: async function (fields, item) {
-            // extract unmarshalled fields from struct
-            const dbModelGuid = Blazor.platform.readStringField(fields, 0);
-            const objectStoreName = Blazor.platform.readStringField(fields, 8);
-            let key = Blazor.platform.readStringField(fields, 16);
-            const mimeType = Blazor.platform.readStringField(fields, 24);
+        updateBlobItem: async function (indexedDbDatabaseModel, objectStoreName, key, mimeType, stream) {
             console.log(`Updating file with mime type ${mimeType}`);
             if (key === "") key = null;
-            const dbModel = getDbModel(dbModelGuid).dbModel;
+            const dbModel = getDbModel(indexedDbDatabaseModel.dbModelGuid).dbModel;
 
-            // create blob from array
-            const dataPtr = Blazor.platform.getArrayEntryPtr(item, 0, 4);
-            const length = Blazor.platform.getArrayLength(item);
-            var blob = new Blob([new Uint8Array(Module.HEAPU8.buffer, dataPtr, length)], { type: mimeType });
+            // create blob from stream
+            const arrayBuffer = await stream.arrayBuffer();
+            var blob = new Blob([arrayBuffer], { type: mimeType });
 
             return await updateBlobItem(dbModel, objectStoreName, blob, key).pipe(Rx.operators.take(1)).toPromise();
         },

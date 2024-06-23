@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Diagnostics;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace DnetIndexedDb
 {
@@ -67,22 +68,6 @@ namespace DnetIndexedDb
             return await _jsRuntime.InvokeAsync<string>("dnetindexeddbinterop.deleteDb", _indexedDbDatabaseModel);
         }
 
-        [StructLayout(LayoutKind.Explicit)]
-        private struct AddBlobStruct
-        {
-            [FieldOffset(0)]
-            public string DbModelGuid;
-
-            [FieldOffset(8)]
-            public string objectStoreName;
-
-            [FieldOffset(16)]
-            public string key;
-
-            [FieldOffset(24)]
-            public string mimeType;
-        }
-
         /// <summary>
         /// Add records to a given data store
         /// </summary>
@@ -92,7 +77,42 @@ namespace DnetIndexedDb
         /// <param name="key"></param>
         /// <param name="mimeType"></param>
         /// <returns></returns>
-        public string AddBlobItem<TEntity>(string objectStoreName, TEntity item, string mimeType, string key = "")
+        public async Task<string> AddBlobItem<TEntity>(string objectStoreName, byte[] item, string key = "", string mimeType = "application/octet-stream")
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                using (BinaryWriter writer = new BinaryWriter(stream))
+                {
+                    writer.Write(item);
+
+                    stream.Position = 0;
+
+                    using (var dotNetStream = new DotNetStreamReference(stream))
+                    {
+                        return await _jsRuntime.InvokeAsync<string>("dnetindexeddbinterop.addBlobItem", _indexedDbDatabaseModel, objectStoreName, key, mimeType, dotNetStream);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add records to a given data store
+        /// </summary>
+        /// <typeparam name="TEntity">Type of Objects in Data Store</typeparam>
+        /// <param name="objectStoreName"></param>
+        /// <param name="stream"></param>
+        /// <param name="key"></param>
+        /// <param name="mimeType"></param>
+        /// <returns></returns>
+        public async Task<string> AddBlobItem<TEntity>(string objectStoreName, Stream stream, string key = "", string mimeType = "application/octet-stream")
+        {
+            using (var dotNetStream = new DotNetStreamReference(stream))
+            {
+                return await _jsRuntime.InvokeAsync<string>("dnetindexeddbinterop.addBlobItem", _indexedDbDatabaseModel, objectStoreName, key, mimeType, dotNetStream);
+            }
+        }
+
+        /* public string AddBlobItem<TEntity>(string objectStoreName, TEntity item, string mimeType, string key = "")
         {
             var addblob = new AddBlobStruct
             {
@@ -102,8 +122,8 @@ namespace DnetIndexedDb
                 mimeType = mimeType
             };
             var unmarshalledRuntime = (IJSUnmarshalledRuntime)_jsRuntime;
-            return unmarshalledRuntime.InvokeUnmarshalled<AddBlobStruct, TEntity, string> ("dnetindexeddbinterop.addBlobItem", addblob, item);
-        }
+            return unmarshalledRuntime.InvokeUnmarshalled<AddBlobStruct, TEntity, string>("dnetindexeddbinterop.addBlobItem", addblob, item);
+        } */
 
         /// <summary>
         /// Add records to a given data store
@@ -199,19 +219,40 @@ namespace DnetIndexedDb
         /// <param name="key"></param>
         /// <param name="mimeType"></param>
         /// <returns></returns>
-        public string UpdateBlobByKey<TEntity>(string objectStoreName, TEntity item, string mimeType, string key)
+        public async ValueTask<string> UpdateBlobByKey<TEntity>(string objectStoreName, byte[] item, string key, string mimeType = "application/octet-stream")
         {
-            var addblob = new AddBlobStruct
+            using (MemoryStream stream = new MemoryStream())
             {
-                DbModelGuid = _indexedDbDatabaseModel.DbModelGuid,
-                objectStoreName = objectStoreName,
-                key = key,
-                mimeType = mimeType
-            };
-            var unmarshalledRuntime = (IJSUnmarshalledRuntime)_jsRuntime;
-            return unmarshalledRuntime.InvokeUnmarshalled<AddBlobStruct, TEntity, string>("dnetindexeddbinterop.updateBlobItem", addblob, item);
+                using (BinaryWriter writer = new BinaryWriter(stream))
+                {
+                    writer.Write(item);
+
+                    stream.Position = 0;
+
+                    using (var dotNetStream = new DotNetStreamReference(stream))
+                    {
+                        return await _jsRuntime.InvokeAsync<string>("dnetindexeddbinterop.updateBlobItem", _indexedDbDatabaseModel, objectStoreName, key, mimeType, dotNetStream);
+                    }
+                }
+            }
         }
 
+        /// <summary>
+        /// Add records to a given data store
+        /// </summary>
+        /// <typeparam name="TEntity">Type of Objects in Data Store</typeparam>
+        /// <param name="objectStoreName"></param>
+        /// <param name="stream"></param>
+        /// <param name="key"></param>
+        /// <param name="mimeType"></param>
+        /// <returns></returns>
+        public async ValueTask<string> UpdateBlobByKey<TEntity>(string objectStoreName, Stream stream, string key, string mimeType = "application/octet-stream")
+        {
+            using (var dotNetStream = new DotNetStreamReference(stream))
+            {
+                return await _jsRuntime.InvokeAsync<string>("dnetindexeddbinterop.updateBlobItem", _indexedDbDatabaseModel, objectStoreName, key, mimeType, dotNetStream);
+            }
+        }
 
         /// <summary>
         /// Return a record in a given data store by its key
@@ -263,7 +304,7 @@ namespace DnetIndexedDb
         //    var b2 = getblob.Destination[1];
         //    var b3 = getblob.Destination[2];
         //    var b4 = getblob.Destination[3];
-            
+
         //    if (BitConverter.IsLittleEndian) Array.Reverse(getblob.BytesReturned);
         //    var br = BitConverter.ToInt32(getblob.BytesReturned, 0);
         //    return br;
@@ -284,44 +325,6 @@ namespace DnetIndexedDb
         {
             var res = await _jsRuntime.InvokeAsync<byte[]>("dnetindexeddbinterop.getBlobByKey3", _indexedDbDatabaseModel, objectStoreName, key, maxBytes);
             return res;
-        }
-
-
-
-        [StructLayout(LayoutKind.Explicit)]
-        public struct InteropStruct
-        {
-            [FieldOffset(0)]
-            public string Name;
-
-            [FieldOffset(8)]
-            public int Year;
-        }
-
- 
-
-
-        [StructLayout(LayoutKind.Explicit)]
-        private struct GetBlobStruct
-        {
-            [FieldOffset(0)]
-            public string DbModelGuid;
-
-            [FieldOffset(8)]
-            public string ObjectStoreName;
-
-            [FieldOffset(16)]
-            public string Key;
-
-            [FieldOffset(24)]
-            public byte[] Destination;
-
-            [FieldOffset(28)]
-            public int MaxBytes;
-
-            [FieldOffset(32)]
-            public byte[] BytesReturned;
-
         }
 
 
