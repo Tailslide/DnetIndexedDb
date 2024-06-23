@@ -28,10 +28,8 @@ namespace DnetIndexedDb
 
             SetDbModel();
         }
-
         private void SetDbModel()
         {
-
             var option = _indexedDbDatabaseOptions.GetExtension<CoreOptionsExtension>();
 
             if (option != null)
@@ -111,19 +109,6 @@ namespace DnetIndexedDb
                 return await _jsRuntime.InvokeAsync<string>("dnetindexeddbinterop.addBlobItem", _indexedDbDatabaseModel, objectStoreName, key, mimeType, dotNetStream);
             }
         }
-
-        /* public string AddBlobItem<TEntity>(string objectStoreName, TEntity item, string mimeType, string key = "")
-        {
-            var addblob = new AddBlobStruct
-            {
-                DbModelGuid = _indexedDbDatabaseModel.DbModelGuid,
-                objectStoreName = objectStoreName,
-                key = key,
-                mimeType = mimeType
-            };
-            var unmarshalledRuntime = (IJSUnmarshalledRuntime)_jsRuntime;
-            return unmarshalledRuntime.InvokeUnmarshalled<AddBlobStruct, TEntity, string>("dnetindexeddbinterop.addBlobItem", addblob, item);
-        } */
 
         /// <summary>
         /// Add records to a given data store
@@ -209,7 +194,6 @@ namespace DnetIndexedDb
             return await _jsRuntime.InvokeAsync<TEntity>("dnetindexeddbinterop.getByKey", _indexedDbDatabaseModel, objectStoreName, key);
         }
 
-
         /// <summary>
         /// Add records to a given data store
         /// </summary>
@@ -267,52 +251,6 @@ namespace DnetIndexedDb
 
         /// <summary>
         /// Return a record in a given data store by its key
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="objectStoreName"></param>
-        /// <param name="destination"></param>
-        /// <param name="maxBytes"></param>
-        /// <returns></returns>
-        //[Obsolete("This function is only compatible with .NET 5")]
-        //public async ValueTask<int> GetBlobByKeyNet5(string objectStoreName, string key, byte[] destination, int maxBytes)
-        //{
-        //    //return await _jsRuntime.InvokeAsync<string>("dnetindexeddbinterop.getBlobByKey2", _indexedDbDatabaseModel, objectStoreName, key);
-
-        //    var unmarshalledRuntime = (IJSUnmarshalledRuntime)_jsRuntime;
-
-        //    var bytesReturned = new byte[4];
-        //    var getblob = new GetBlobStruct
-        //    {
-        //        DbModelGuid = _indexedDbDatabaseModel.DbModelGuid,
-        //        Destination = destination,
-        //        MaxBytes = maxBytes,
-        //        Key = key,
-        //        ObjectStoreName = objectStoreName,
-        //        BytesReturned = bytesReturned
-        //    };
-
-
-        //    var res= unmarshalledRuntime.InvokeUnmarshalled<GetBlobStruct, int>("dnetindexeddbinterop.getBlobByKey2", getblob);
-
-        //    // invoke umarshalled seems to return immediately, wait for result to get written
-        //    await Task.Delay(3000);
-        //    while (bytesReturned[0] == 0 && bytesReturned[1] == 0 && bytesReturned[2] == 0 && bytesReturned[3] == 0)
-        //    {
-        //        await Task.Delay(10);
-        //    }
-        //    var b1 = getblob.Destination[0];
-        //    var b2 = getblob.Destination[1];
-        //    var b3 = getblob.Destination[2];
-        //    var b4 = getblob.Destination[3];
-
-        //    if (BitConverter.IsLittleEndian) Array.Reverse(getblob.BytesReturned);
-        //    var br = BitConverter.ToInt32(getblob.BytesReturned, 0);
-        //    return br;
-        //}
-
-
-        /// <summary>
-        /// Return a record in a given data store by its key
         /// 
         /// This function ONLY works in .NET 6+
         /// https://docs.microsoft.com/en-us/dotnet/core/compatibility/aspnet-core/6.0/byte-array-interop
@@ -326,7 +264,6 @@ namespace DnetIndexedDb
             var res = await _jsRuntime.InvokeAsync<byte[]>("dnetindexeddbinterop.getBlobByKey3", _indexedDbDatabaseModel, objectStoreName, key, maxBytes);
             return res;
         }
-
 
         /// <summary>
         /// Directly references blob from html element without having to marshall it into .NET
@@ -342,7 +279,6 @@ namespace DnetIndexedDb
             return await _jsRuntime.InvokeAsync<string>("dnetindexeddbinterop.assignBlobToElement", _indexedDbDatabaseModel, objectStoreName, key, elementId, attribute);
         }
 
-
         /// <summary>
         /// Directly updates blob from html element without having to marshall it into .NET
         /// </summary>
@@ -356,7 +292,6 @@ namespace DnetIndexedDb
         {
             return await _jsRuntime.InvokeAsync<string>("dnetindexeddbinterop.updateBlobFromElement", _indexedDbDatabaseModel, objectStoreName, key, elementId, attribute);
         }
-
 
         /// <summary>
         /// Return a record in a data store matching TEntity.Name by key
