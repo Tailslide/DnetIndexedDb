@@ -528,18 +528,18 @@ OR
 
 ### Add a binary blob to the store
 
-```string AddBlobItem<TEntity>(string objectStoreName, TEntity item, string mimeType, string key = "")```
+```string AddBlobItem<TEntity>(string objectStoreName, TEntity item, string key = "", string mimeType = "application/octet-stream")```
 
 ```CSharp
-  var result = await BlobDb.AddBlobItem<byte[]>("StoreName", Blob,"image/jpeg", "myrecordkey1");
+  var result = await BlobDb.AddBlobItem<byte[]>("StoreName", Blob, "myrecordkey1", "image/jpeg");
 ```
 
 ### Update binary blob in the store
 
-```string UpdateBlobByKey<TEntity>(string objectStoreName, TEntity item, string mimeType, string key)```
+```string UpdateBlobByKey<TEntity>(string objectStoreName, TEntity item, string key = "", string mimeType = "application/octet-stream")```
 
 ```CSharp
-  var result = BlobDb.UpdateBlobByKey<byte[]>("StoreName", Blob, "image/png", "myrecordkey1");
+  var result = BlobDb.UpdateBlobByKey<byte[]>("StoreName", Blob, "myrecordkey1", "image/png");
 ```
 
 ### Get marshalled base 64 encoded blob from the store (slow!)

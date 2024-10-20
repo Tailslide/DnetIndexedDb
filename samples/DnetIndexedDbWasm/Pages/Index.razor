@@ -320,14 +320,14 @@
         var db1Result = await BlobDb.OpenIndexedDb();  
         if (db1Result != -1)
         {
-            byte[] Blob = new byte[	5242880];
+            byte[] Blob = new byte[5242880];
             //optionally randomize all the bytes
             //Random rnd = new Random();
             //rnd.NextBytes(Blob);
             var db1Resultdel = BlobDb.DeleteAll("BlobStore");
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            var db1Result1 = BlobDb.AddBlobItem<byte[]>("BlobStore", Blob, "","firstrecord");
+            var db1Result1 = await BlobDb.AddBlobItem<byte[]>("BlobStore", Blob, "firstrecord", "");
             Messages.Add($"Added 5Mb blob to store in {sw.ElapsedMilliseconds} ms");
             StateHasChanged();
             await Task.Delay(1);
@@ -343,7 +343,7 @@
             StateHasChanged();
             await Task.Delay(1);
             sw.Restart();
-            var db1Result2 = BlobDb.UpdateBlobByKey<byte[]>("BlobStore", Blob, "image/jpeg", "firstrecord");
+            var db1Result2 = BlobDb.UpdateBlobByKey<byte[]>("BlobStore", Blob, "firstrecord", "image/jpeg");
             Messages.Add($"Updated Blob in {sw.ElapsedMilliseconds}ms ");
 
 
@@ -394,7 +394,7 @@
         foreach (var pic in BinaryPics)
         {
             count++;
-            var newres = BlobDb.AddBlobItem<byte[]>("BlobStore", pic.Item1, pic.Item2, count.ToString()+"-binary");
+            var newres = await BlobDb.AddBlobItem<byte[]>("BlobStore", pic.Item1, count.ToString() + "-binary");
         }
         Messages.Add($"Successfully saved {count} binary images in {sw.ElapsedMilliseconds} ms");
         if (SaveBase64)
@@ -405,7 +405,7 @@
                 count++;
                 var str = "data:image;base64," + System.Convert.ToBase64String(pic.Item1);
                 var bytes = Encoding.ASCII.GetBytes(str);
-                var newres = BlobDb.AddBlobItem<byte[]>("BlobStore", bytes, pic.Item2, count.ToString() + "-base64");
+                var newres = await BlobDb.AddBlobItem<byte[]>("BlobStore", bytes, count.ToString() + "-base64");
             }
             Messages.Add($"Successfully saved {count} base64 images in {sw.ElapsedMilliseconds} ms");
         }
