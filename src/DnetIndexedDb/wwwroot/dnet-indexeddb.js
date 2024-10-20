@@ -647,6 +647,62 @@ window.dnetindexeddbinterop = (function () {
         });
     }
 
+    function hasKey(dbModel, objectStoreName, key) {
+        return Rx.Observable.create((observer) => {
+            if (dbModel.instance === null) {
+                observer.error(indexedDbMessages.DB_CLOSE);
+            } else {
+                const transaction = dbModel.instance.transaction([objectStoreName], transactionTypes.readonly);
+
+                const onTransactionError = () => {
+                    observer.error(indexedDbMessages.DB_TRANSACTION_ERROR);
+                };
+
+                const objectStore = transaction.objectStore(objectStoreName);
+
+                const checkKeyExists = () => {
+                    return new Rx.Observable((checkReqObserver) => {
+                        const getRequest = objectStore.get(key);
+
+                        const onRequestError = () => {
+                            checkReqObserver.error(indexedDbMessages.DB_GETBYKEY_ERROR);
+                        };
+
+                        const onSuccess = () => {
+                            // If getRequest.result is undefined, the key does not exist
+                            checkReqObserver.next(getRequest.result !== undefined);
+                            checkReqObserver.complete();
+                        };
+
+                        getRequest.addEventListener(eventTypes.success, onSuccess);
+                        getRequest.addEventListener(eventTypes.error, onRequestError);
+
+                        return () => {
+                            getRequest.removeEventListener(eventTypes.success, onSuccess);
+                            getRequest.removeEventListener(eventTypes.error, onRequestError);
+                        };
+                    });
+                };
+
+                transaction.addEventListener(eventTypes.error, onTransactionError);
+
+                const checkRequestSubscriber = checkKeyExists().subscribe(
+                    (exists) => {
+                        observer.next(exists);
+                        observer.complete();
+                    },
+                    (error) => {
+                        observer.error(error);
+                    }
+                );
+
+                return () => {
+                    checkRequestSubscriber.unsubscribe();
+                };
+            }
+        });
+    }
+
     function getByKey(dbModel, objectStoreName, key) {
 
         return Rx.Observable.create((observer) => {
@@ -1314,7 +1370,7 @@ window.dnetindexeddbinterop = (function () {
         //                    destinationUint8Array.set(sourceUint8Array, 0);
         //                    console.log(`Dest array first three bytes=${destinationUint8Array[0]} ${destinationUint8Array[1]} ${destinationUint8Array[2]} `)
         //                    console.log(`getBlobByKey2() promise returning ${bytesToRead}`);
-        //                    var bytesReturnedArray = Blazor.platform.toUint8Array(bytesReturned);                            
+        //                    var bytesReturnedArray = Blazor.platform.toUint8Array(bytesReturned);
         //                    var readout = new Uint8Array(toBytesInt32(bytesToRead));
         //                    console.log(`getBlobByKey2() readout[0] ${readout[0]}`);
         //                    bytesReturnedArray.set(readout, 0);
@@ -1332,6 +1388,11 @@ window.dnetindexeddbinterop = (function () {
         //    });
         //},
 
+        hasKey: async function (indexedDbDatabaseModel, objectStoreName, key) {
+            const dbModel = getDbModel(indexedDbDatabaseModel.dbModelGuid).dbModel;
+
+            return await hasKey(dbModel, objectStoreName, key).toPromise();
+        },
 
         //// .NET 6 compatible version of above
         ////

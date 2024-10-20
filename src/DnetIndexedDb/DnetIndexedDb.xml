@@ -28,6 +28,20 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:DnetIndexedDb.Fluent.IndexedDbDatabaseExtensions.UseKeyGenerator(DnetIndexedDb.Models.IndexedDbDatabaseModel)">
+            <summary>
+            Sets Database UseKeyGenerator Property to true
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DnetIndexedDb.Fluent.IndexedDbDatabaseExtensions.UseKeyGenerator(DnetIndexedDb.Models.IndexedDbDatabaseModel,System.Boolean)">
+            <summary>
+            Sets Database UseKeyGenerator Property to given value
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
         <member name="M:DnetIndexedDb.Fluent.IndexedDbDatabaseExtensions.AddStore(DnetIndexedDb.Models.IndexedDbDatabaseModel,System.String)">
             <summary>
             Creates a new IndexedDbStore and adds it to the Database Model
@@ -36,7 +50,23 @@
             <param name="name"></param>
             <returns></returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:DnetIndexedDb.Fluent.IndexedDbDatabaseExtensions.AddStore``1(DnetIndexedDb.Models.IndexedDbDatabaseModel)" -->
+        <member name="M:DnetIndexedDb.Fluent.IndexedDbDatabaseExtensions.AddStore``1(DnetIndexedDb.Models.IndexedDbDatabaseModel)">
+            <summary>
+            Adds a new store named TEntity.Name and adds Key and Indexes based on IndexedDbKey and IndexedDbIndex Attributes
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DnetIndexedDb.Fluent.IndexedDbDatabaseExtensions.AddStore``1(DnetIndexedDb.Models.IndexedDbDatabaseModel,System.String)">
+            <summary>
+            Adds a new store and adds Key and Indexes based on IndexedDbKey and IndexedDbIndex Attributes
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="model"></param>
+            <param name="storeName"></param>
+            <returns></returns>
+        </member>
         <member name="M:DnetIndexedDb.Fluent.IndexedDbStoreExtensions.WithKey(DnetIndexedDb.Models.IndexedDbStore,System.String)">
             <summary>
             Add non-auto-incrementing key to store.
@@ -89,6 +119,28 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:DnetIndexedDb.IndexedDbInterop.AddBlobItem``1(System.String,System.Byte[],System.String,System.String)">
+            <summary>
+            Add records to a given data store
+            </summary>
+            <typeparam name="TEntity">Type of Objects in Data Store</typeparam>
+            <param name="objectStoreName"></param>
+            <param name="item"></param>
+            <param name="key"></param>
+            <param name="mimeType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DnetIndexedDb.IndexedDbInterop.AddBlobItem``1(System.String,System.IO.Stream,System.String,System.String)">
+            <summary>
+            Add records to a given data store
+            </summary>
+            <typeparam name="TEntity">Type of Objects in Data Store</typeparam>
+            <param name="objectStoreName"></param>
+            <param name="stream"></param>
+            <param name="key"></param>
+            <param name="mimeType"></param>
+            <returns></returns>
+        </member>
         <member name="M:DnetIndexedDb.IndexedDbInterop.AddItems``1(System.String,System.Collections.Generic.List{``0})">
             <summary>
             Add records to a given data store
@@ -123,6 +175,15 @@
             <param name="items"></param>
             <returns></returns>
         </member>
+        <member name="M:DnetIndexedDb.IndexedDbInterop.HasKey(System.String,System.String)">
+            <summary>
+            Return a true if a store has this key
+            
+            </summary>
+            <param name="key"></param>
+            <param name="objectStoreName"></param>
+            <returns></returns>
+        </member>
         <member name="M:DnetIndexedDb.IndexedDbInterop.UpdateItemsByKey``1(System.String,System.Collections.Generic.List{``0},System.Collections.Generic.List{System.Int32})">
             <summary>
             Update records in a given data store by key
@@ -150,6 +211,70 @@
             <typeparam name="TKey">Type of Key Field</typeparam>
             <param name="key"></param>
             <param name="objectStoreName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DnetIndexedDb.IndexedDbInterop.UpdateBlobByKey``1(System.String,System.Byte[],System.String,System.String)">
+            <summary>
+            Add records to a given data store
+            </summary>
+            <typeparam name="TEntity">Type of Objects in Data Store</typeparam>
+            <param name="objectStoreName"></param>
+            <param name="item"></param>
+            <param name="key"></param>
+            <param name="mimeType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DnetIndexedDb.IndexedDbInterop.UpdateBlobByKey``1(System.String,System.IO.Stream,System.String,System.String)">
+            <summary>
+            Add records to a given data store
+            </summary>
+            <typeparam name="TEntity">Type of Objects in Data Store</typeparam>
+            <param name="objectStoreName"></param>
+            <param name="stream"></param>
+            <param name="key"></param>
+            <param name="mimeType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DnetIndexedDb.IndexedDbInterop.GetBlobByKey(System.String,System.String)">
+            <summary>
+            Return a record in a given data store by its key
+            </summary>
+            <param name="key"></param>
+            <param name="objectStoreName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DnetIndexedDb.IndexedDbInterop.GetBlobByKey(System.String,System.String,System.Int32)">
+            <summary>
+            Return a record in a given data store by its key
+            
+            This function ONLY works in .NET 6+
+            https://docs.microsoft.com/en-us/dotnet/core/compatibility/aspnet-core/6.0/byte-array-interop
+            
+            </summary>
+            <param name="key"></param>
+            <param name="objectStoreName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DnetIndexedDb.IndexedDbInterop.AssignBlobToElement(System.String,System.String,System.String,System.String)">
+            <summary>
+            Directly references blob from html element without having to marshall it into .NET
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <param name="objectStoreName"></param>
+            <param name="key"></param>
+            <param name="elementId"></param>
+            <param name="attribute"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DnetIndexedDb.IndexedDbInterop.UpdateBlobFromElement(System.String,System.String,System.String,System.String)">
+            <summary>
+            Directly updates blob from html element without having to marshall it into .NET
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <param name="objectStoreName"></param>
+            <param name="key"></param>
+            <param name="elementId"></param>
+            <param name="attribute"></param>
             <returns></returns>
         </member>
         <member name="M:DnetIndexedDb.IndexedDbInterop.GetByKey``2(``0)">

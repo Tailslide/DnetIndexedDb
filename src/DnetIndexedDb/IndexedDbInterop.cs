@@ -28,6 +28,7 @@ namespace DnetIndexedDb
 
             SetDbModel();
         }
+
         private void SetDbModel()
         {
             var option = _indexedDbDatabaseOptions.GetExtension<CoreOptionsExtension>();
@@ -157,6 +158,19 @@ namespace DnetIndexedDb
         }
 
         /// <summary>
+        /// Return a true if a store has this key
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="objectStoreName"></param>
+        /// <returns></returns>
+        public async ValueTask<bool> HasKey(string objectStoreName, string key)
+        {
+            var res = await _jsRuntime.InvokeAsync<bool>("dnetindexeddbinterop.hasKey", _indexedDbDatabaseModel, objectStoreName, key);
+            return res;
+        }
+
+        /// <summary>
         /// Update records in a given data store by key
         /// </summary>
         /// <typeparam name="TEntity">Type of Objects in Data Store</typeparam>
@@ -193,6 +207,7 @@ namespace DnetIndexedDb
         {
             return await _jsRuntime.InvokeAsync<TEntity>("dnetindexeddbinterop.getByKey", _indexedDbDatabaseModel, objectStoreName, key);
         }
+
 
         /// <summary>
         /// Add records to a given data store
